@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NewsBaba: open source for Tamil</title>
+<meta name="description" content="NewsBaba's open-source projects: an open Tesseract OCR model for printed Tamil, the Tamil interface for the ArtCraft creative apps, and every public repository with its topics.">
+<meta property="og:title" content="NewsBaba: open source for Tamil">
+<meta property="og:description" content="An open Tesseract OCR model for printed Tamil, the Tamil interface for the ArtCraft apps, and every public repository.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://newsbaba24x7.github.io/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&family=Hind+Madurai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; }
+[hidden] { display: none !important; }
+/* Same design language as the inner pages: teal accent, Catamaran headings, Hind Madurai text. */
+:root {
+  --bg: #f4f6f5; --surface: #ffffff; --ink: #17211f; --muted: #5a6a66; --line: #d9e1de;
+  --accent: #0b6e73; --accent-ink: #ffffff; --accent-soft: #e2f0ef;
+  --good: #1f7a3a; --good-bg: #e3f3e7; --quiet: #5f6764; --quiet-bg: #eceeed;
+  --shadow: 0 1px 2px rgba(20, 40, 36, .06), 0 4px 14px rgba(20, 40, 36, .06);
+  --display: "Catamaran", "Noto Sans Tamil", "Latha", system-ui, sans-serif;
+  --body: "Hind Madurai", "Noto Sans Tamil", "Latha", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1615; --surface: #162120; --ink: #e4ecea; --muted: #9db0ab; --line: #2a3a37;
+    --accent: #5cc6c0; --accent-ink: #0f1615; --accent-soft: #173533;
+    --good: #7fd39a; --good-bg: #173322; --quiet: #a7b1ae; --quiet-bg: #232d2b;
+    --shadow: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1615; --surface: #162120; --ink: #e4ecea; --muted: #9db0ab; --line: #2a3a37;
+  --accent: #5cc6c0; --accent-ink: #0f1615; --accent-soft: #173533;
+  --good: #7fd39a; --good-bg: #173322; --quiet: #a7b1ae; --quiet-bg: #232d2b;
+  --shadow: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+[lang="ta"] { font-family: var(--body); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Site menu (shared with the inner pages) */
+.sitebar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.sitebar .wrap { display: flex; align-items: center; gap: 8px 20px; min-height: 54px; flex-wrap: wrap; padding-block: 6px; }
+.brand { font-family: var(--display); font-weight: 800; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -.01em; }
+.brand span { color: var(--accent); }
+.sitebar ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px 6px; flex-wrap: wrap; }
+.sitebar ul a { display: block; padding: 6px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; font-size: 15px; font-weight: 500; }
+.sitebar ul a:hover { color: var(--ink); background: var(--accent-soft); }
+.sitebar ul a[aria-current="page"] { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+
+/* Header */
+header.hero { display: grid; gap: 14px; padding: 44px 0 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(34px, 5.4vw, 54px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h1 .ta { color: var(--accent); font-weight: 700; display: block; font-size: .62em; margin-top: 8px; }
+.lede { margin: 0; max-width: 70ch; color: var(--muted); font-size: 17px; }
+.summary { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { display: inline-flex; align-items: baseline; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; }
+.chip b { font-family: var(--display); font-size: 20px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+section { padding-top: 44px; scroll-margin-top: 64px; }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(24px, 3.2vw, 32px); line-height: 1.15; margin: 0 0 6px; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 20px; line-height: 1.25; margin: 0; }
+.sub { color: var(--muted); margin: 0 0 16px; max-width: 75ch; }
+
+/* Featured pages */
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.feature { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px 22px 20px; box-shadow: var(--shadow); display: grid; gap: 10px; align-content: start; min-width: 0; }
+.feature .kicker { font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.feature h3 { font-size: 24px; }
+.feature p { margin: 0; color: var(--muted); }
+.stats { display: flex; flex-wrap: wrap; gap: 8px; }
+.stat { font-size: 13.5px; padding: 3px 10px; border-radius: 999px; background: var(--good-bg); color: var(--good); font-weight: 600; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.btn { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 14.5px; text-decoration: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn:hover { filter: brightness(1.05); }
+
+/* Topics */
+.topics { display: flex; flex-wrap: wrap; gap: 8px; }
+.topic { font: 500 14px var(--body); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.topic .n { color: var(--muted); font-variant-numeric: tabular-nums; margin-left: 4px; }
+.topic[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.topic[aria-pressed="true"] .n { color: inherit; opacity: .8; }
+.topic:hover { border-color: var(--accent); }
+.legend { font-size: 13.5px; color: var(--muted); margin: 10px 0 0; }
+
+/* Repositories */
+.group { margin-top: 26px; }
+.group > h3 { margin-bottom: 4px; }
+.group > p { margin: 0 0 12px; color: var(--muted); font-size: 15px; max-width: 80ch; }
+.repos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.repo { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.repo h4 { margin: 0; font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.repo h4 a { color: var(--ink); text-decoration: none; }
+.repo h4 a:hover { color: var(--accent); text-decoration: underline; }
+.repo .what { font-size: 13.5px; color: var(--accent); font-weight: 600; }
+.repo p { margin: 0; font-size: 14.5px; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+.tag { font-family: var(--mono); font-size: 11.5px; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.tag.lang { background: var(--quiet-bg); color: var(--quiet); }
+.repo .links { gap: 4px 14px; font-size: 14px; }
+.repo .links a { font-weight: 500; }
+.fork { font-size: 13px; color: var(--muted); }
+.empty { color: var(--muted); font-style: italic; }
+
+.about { max-width: 75ch; }
+.about p { margin: 0 0 12px; }
+footer { margin: 52px 0 40px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; display: grid; gap: 4px; }
+
+@media (max-width: 640px) {
+  header.hero { padding-top: 28px; }
+  body { font-size: 15.5px; }
+  .sitebar { position: static; }      /* the menu wraps to several rows on phones; don't pin it */
+  .sitebar .wrap { gap: 2px 12px; }
+  .sitebar ul a { padding: 5px 8px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="sitebar" aria-label="Site">
+  <div class="wrap">
+    <a class="brand" href="/">News<span>Baba</span></a>
+    <ul>
+      <li><a href="/" aria-current="page">Home</a></li>
+      <li><a href="/tamil-tess-trainer/">Tamil OCR</a></li>
+      <li><a href="/artcraft-tamil/">ArtCraft in Tamil</a></li>
+      <li><a href="#topics">Topics</a></li>
+      <li><a href="#repositories">Repositories</a></li>
+      <li><a href="https://github.com/newsbaba24x7">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Open source · Tamil language technology · updated 17 Nov 2026</div>
+  <h1>Open source for Tamil <span class="ta" lang="ta">தமிழுக்கான திறந்த மூல மென்பொருள்</span></h1>
+  <p class="lede">NewsBaba builds and contributes open-source software that works well in Tamil: an open Tesseract model
+    that reads printed Tamil more accurately, the Tamil interface for the ArtCraft creative apps, and Tamil support in
+    ArtCraft's shared translations and fonts.</p>
+  <div class="summary" aria-label="At a glance">
+    <span class="chip"><b>2</b> project pages</span>
+    <span class="chip"><b>16</b> public repositories</span>
+    <span class="chip"><b>9</b> ArtCraft apps with Tamil interface work</span>
+  </div>
+</header>
+
+<main>
+
+<section id="pages">
+  <h2>Project pages</h2>
+  <p class="sub">The two projects with their own pages on this site.</p>
+  <div class="features">
+    <article class="feature">
+      <div class="kicker">Tamil OCR · Tesseract 5 · Apache-2.0</div>
+      <h3>Tamil OCR for Tesseract</h3>
+      <p><b>tam_v2</b>, an open Tesseract model for printed Tamil, trained on openly licensed fonts and real scanned
+        book lines proofread on Tamil Wikisource, with <b>tamtrain</b>, the tool that trains and tests it.</p>
+      <div class="stats">
+        <span class="stat">36% fewer character errors</span>
+        <span class="stat">173 of 197 pages better</span>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="/tamil-tess-trainer/">Open the page</a>
+        <a class="btn" href="https://github.com/newsbaba24x7/tamil-tess-trainer/releases/tag/v2.0.0">Download</a>
+        <a class="btn" href="https://github.com/newsbaba24x7/tamil-tess-trainer">Repository</a>
+      </div>
+    </article>
+    <article class="feature">
+      <div class="kicker">Localisation · ArtCraft apps</div>
+      <h3>ArtCraft in Tamil <span lang="ta" style="color:var(--accent)">தமிழ்</span></h3>
+      <p>Where each ArtCraft app's Tamil interface stands: the translation catalog, the pull request that switches
+        Tamil on in the app, the font pin that brings Noto Sans Tamil, native-speaker review, and screenshots of the
+        apps running in Tamil.</p>
+      <div class="stats">
+        <span class="stat">9 apps tracked</span>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="/artcraft-tamil/">Open the page</a>
+        <a class="btn" href="https://github.com/newsbaba24x7/artcraft-tamil">Repository</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="topics">
+  <h2>Topics</h2>
+  <p class="sub">Every topic across the repositories: GitHub topics, subjects and programming languages. Choose one to
+    filter the repositories below.</p>
+  <div class="topics" id="topic-list" role="group" aria-label="Filter repositories by topic"></div>
+  <p class="legend" id="filter-note" aria-live="polite"></p>
+</section>
+
+<section id="repositories">
+  <h2>Repositories</h2>
+  <p class="sub">All 16 public repositories. The ArtCraft repositories are forks of
+    <a href="https://github.com/storytold">storytold</a>'s originals, used to prepare Tamil contributions for them.</p>
+  <div id="groups"></div>
+  <noscript><p>Turn on JavaScript to see the repository list, or browse it on
+    <a href="https://github.com/newsbaba24x7?tab=repositories">GitHub</a>.</p></noscript>
+</section>
+
+<section id="about" class="about">
+  <h2>About</h2>
+  <p>This site collects NewsBaba's public work on GitHub. The projects share one aim: software that works in Tamil as
+    well as it does in English, built in the open so others can check, reuse and improve it.</p>
+  <p>Ideas, bug reports and corrections are welcome as issues on the relevant repository, for example
+    <a href="https://github.com/newsbaba24x7/tamil-tess-trainer/issues">Tamil OCR issues</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <div>NewsBaba · <a href="https://github.com/newsbaba24x7">github.com/newsbaba24x7</a> · hosted on GitHub Pages</div>
+  <div>Repository list as of 17 November 2026. Source: <a href="https://github.com/newsbaba24x7/newsbaba24x7.github.io">newsbaba24x7.github.io</a>.</div>
+</footer>
+
+</div>
+
+<script>
+// One entry per public repository (from GitHub, 17 Nov 2026). "gh" are the repository's GitHub topics;
+// "subjects" group the repositories on this page.
+const REPOS = [
+  { name: "tamil-tess-trainer", group: "tamil", what: "Tamil OCR",
+    desc: "Open Tesseract OCR model for printed Tamil (tam_v2), and the tool that trains and tests it on real scans",
+    gh: ["ocr", "tamil", "tesseract", "tesseract-ocr", "traineddata", "wikisource"], subjects: ["tamil", "ocr"], lang: "Python",
+    page: "/tamil-tess-trainer/" },
+  { name: "artcraft-tamil", group: "tamil", what: "Tamil interface status",
+    desc: "Status of the Tamil (ta) interface for the ArtCraft apps",
+    gh: [], subjects: ["tamil", "localisation", "artcraft"], lang: "HTML", page: "/artcraft-tamil/" },
+
+  { name: "artcraft", group: "apps", what: "Crafting engine",
+    desc: "ArtCraft is an intentional crafting engine for artists, designers, and filmmakers",
+    gh: [], subjects: ["artcraft", "creative-apps"], lang: "Rust", home: "https://getartcraft.com", fork: "storytold/artcraft" },
+  { name: "photocraft", group: "apps", what: "Image editing",
+    desc: "PhotoCraft: An open-source, photo editor written by scratch in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", home: "https://getartcraft.com/apps/photocraft", fork: "storytold/photocraft" },
+  { name: "vectorcraft", group: "apps", what: "Vector illustration",
+    desc: "VectorCraft: An open-source vector art tool written from scratch in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", home: "https://getartcraft.com/apps/vectorcraft", fork: "storytold/vectorcraft" },
+  { name: "pdfcraft", group: "apps", what: "PDF editing",
+    desc: "PdfCraft: An open-source PDF reader and editor written by scratch in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", home: "https://getartcraft.com/apps/printcraft", fork: "storytold/pdfcraft" },
+  { name: "cadcraft", group: "apps", what: "2D and 3D drafting",
+    desc: "CADCraft: computer-aided design and drafting — an open-source, clean-room CAD application in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", fork: "storytold/cadcraft" },
+  { name: "lightcraft", group: "apps", what: "Photo library and development",
+    desc: "LightCraft: An open-source non-destructive photo editor written from scratch in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", home: "https://getartcraft.com/apps/lightcraft", fork: "storytold/lightcraft" },
+  { name: "filmcraft", group: "apps", what: "Video editing",
+    desc: "FilmCraft: An open-source, nonlinear video editor written from scratch in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", home: "https://getartcraft.com/apps/filmcraft", fork: "storytold/filmcraft" },
+  { name: "wordcraft", group: "apps", what: "Word processing",
+    desc: "An open-source, clean-room reimplementation of Microsoft Word in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", home: "https://getartcraft.com/apps/wordcraft", fork: "storytold/wordcraft" },
+  { name: "deckcraft", group: "apps", what: "Presentations",
+    desc: "DeckCraft: presentations and slide shows; an open-source, clean-room presentation app in pure Rust. Part of the ArtCraft Crafting Apps.",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", home: "https://getartcraft.com/apps/slidecraft", fork: "storytold/deckcraft" },
+  { name: "gridcraft", group: "apps", what: "Spreadsheets",
+    desc: "GridCraft: an open-source, clean-room spreadsheet in pure Rust. By ArtCraft.",
+    gh: [], subjects: ["artcraft", "creative-apps", "tamil-interface"], lang: "Rust", fork: "storytold/gridcraft" },
+  { name: "figcraft", group: "apps", what: "Interface design",
+    desc: "FigCraft: interface design and prototyping; an open-source, clean-room reimplementation of collaborative design workflows in pure Rust",
+    gh: [], subjects: ["artcraft", "creative-apps"], lang: "Rust", home: "https://getartcraft.com/apps/figcraft", fork: "storytold/figcraft" },
+
+  { name: "craft-i18n", group: "shared", what: "Translations",
+    desc: "Shared translations for the storytold Crafting Apps: TSV catalogs and the CI that checks them",
+    gh: [], subjects: ["artcraft", "translations", "localisation"], fork: "storytold/craft-i18n" },
+  { name: "craft-fonts", group: "shared", what: "Fonts",
+    desc: "Fonts for the Crafting Apps",
+    gh: [], subjects: ["artcraft", "fonts"], lang: "Rust", fork: "storytold/craft-fonts" },
+
+  { name: "newsbaba24x7.github.io", group: "site", what: "This website",
+    desc: "The home page of newsbaba24x7.github.io, with links to the project pages and every public repository",
+    gh: [], subjects: ["website"], lang: "HTML", page: "/" },
+];
+const GROUPS = [
+  { id: "tamil", title: "Tamil projects", note: "Original NewsBaba projects." },
+  { id: "apps", title: "ArtCraft apps", note: "Forks of storytold's ArtCraft creative apps. Nine of them carry Tamil interface work, tracked on the ArtCraft in Tamil page." },
+  { id: "shared", title: "Shared ArtCraft resources", note: "Forks of the translation catalogs and fonts that every ArtCraft app uses; Tamil catalogs and Noto Sans Tamil pins go here." },
+  { id: "site", title: "This site", note: "The source of this page." },
+];
+const LABEL = { "tamil-interface": "Tamil interface", "creative-apps": "creative apps", "localisation": "localisation" };
+
+const topicsOf = r => [...new Set([...r.gh, ...r.subjects, ...(r.lang ? [r.lang.toLowerCase()] : [])])];
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const gh = name => `https://github.com/newsbaba24x7/${name}`;
+
+function card(r) {
+  const links = [`<a href="${gh(r.name)}">Repository</a>`];
+  if (r.page) links.push(`<a href="${r.page}">Project page</a>`);
+  if (r.home) links.push(`<a href="${r.home}">Website ↗</a>`);
+  const tags = r.gh.map(t => `<a class="tag" href="https://github.com/topics/${t}" title="GitHub topic">${esc(t)}</a>`)
+    .concat(r.lang ? [`<span class="tag lang">${esc(r.lang)}</span>`] : []).join("");
+  return `<article class="repo" data-topics="${topicsOf(r).join(" ")}">
+    <h4><a href="${gh(r.name)}">${esc(r.name)}</a></h4>
+    <div class="what">${esc(r.what)}</div>
+    <p>${esc(r.desc)}</p>
+    ${tags ? `<div class="tags">${tags}</div>` : ""}
+    ${r.fork ? `<div class="fork">Fork of <a href="https://github.com/${r.fork}">${esc(r.fork)}</a></div>` : ""}
+    <div class="links">${links.join("")}</div>
+  </article>`;
+}
+
+document.getElementById("groups").innerHTML = GROUPS.map(g => `<div class="group" data-group="${g.id}">
+  <h3>${esc(g.title)}</h3><p>${esc(g.note)}</p>
+  <div class="repos">${REPOS.filter(r => r.group === g.id).map(card).join("")}</div></div>`).join("");
+
+const counts = {};
+REPOS.forEach(r => topicsOf(r).forEach(t => (counts[t] = (counts[t] || 0) + 1)));
+const order = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
+const list = document.getElementById("topic-list");
+list.innerHTML = `<button class="topic" type="button" data-t="" aria-pressed="true">all<span class="n">${REPOS.length}</span></button>` +
+  order.map(t => `<button class="topic" type="button" data-t="${t}" aria-pressed="false">${esc(LABEL[t] || t)}<span class="n">${counts[t]}</span></button>`).join("");
+
+function applyFilter(t) {
+  for (const b of list.querySelectorAll(".topic")) b.setAttribute("aria-pressed", String(b.dataset.t === t));
+  let shown = 0;
+  for (const el of document.querySelectorAll(".repo")) {
+    const ok = !t || el.dataset.topics.split(" ").includes(t);
+    el.hidden = !ok; shown += ok;
+  }
+  for (const g of document.querySelectorAll(".group")) g.hidden = !g.querySelector(".repo:not([hidden])");
+  document.getElementById("filter-note").textContent = t ? `Showing ${shown} of ${REPOS.length} repositories with the topic “${LABEL[t] || t}”.` : "";
+  try { history.replaceState(null, "", t ? `#topic=${encodeURIComponent(t)}` : location.pathname); } catch {}
+}
+list.addEventListener("click", e => {
+  const b = e.target.closest(".topic");
+  if (!b) return;
+  applyFilter(b.dataset.t);
+  if (b.dataset.t) document.getElementById("repositories").scrollIntoView();
+});
+const m = location.hash.match(/^#topic=(.+)$/);
+if (m) applyFilter(decodeURIComponent(m[1]));
+</script>
+</body>
+</html>
