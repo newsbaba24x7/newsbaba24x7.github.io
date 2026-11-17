@@ -81,6 +81,8 @@ h3 { font-family: var(--display); font-weight: 700; font-size: 20px; line-height
 .feature p { margin: 0; color: var(--muted); }
 .stats { display: flex; flex-wrap: wrap; gap: 8px; }
 .stat { font-size: 13.5px; padding: 3px 10px; border-radius: 999px; background: var(--good-bg); color: var(--good); font-weight: 600; }
+a.stat { text-decoration: none; }
+a.stat:hover { text-decoration: underline; }
 .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
 .btn { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 14.5px; text-decoration: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
 .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -171,7 +173,7 @@ footer { margin: 52px 0 40px; padding-top: 18px; border-top: 1px solid var(--lin
         book lines proofread on Tamil Wikisource, with <b>tamtrain</b>, the tool that trains and tests it.</p>
       <div class="stats">
         <span class="stat">36% fewer character errors</span>
-        <span class="stat">173 of 197 pages better</span>
+        <a class="stat" href="/tamil-tess-trainer/benchmarks/">See Benchmark Results</a>
       </div>
       <div class="links">
         <a class="btn primary" href="/tamil-tess-trainer/">Open the page</a>
